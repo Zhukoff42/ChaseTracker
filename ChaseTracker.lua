@@ -1,6 +1,6 @@
 script_name('ChaseTracker')
 script_author('Zhukoff Kevin_Zhukoff [Yuma]')
-script_version('1.0')
+script_version('1.1')
 
 require 'lib.moonloader'
 local sampev = require 'lib.samp.events'
@@ -21,7 +21,7 @@ local script_url = 'https://raw.githubusercontent.com/Zhukoff42/ChaseTracker/mai
 local update_path = getWorkingDirectory() .. '/update_chase.json'
 local script_path = thisScript().path
 
-local update_state = "Ожидание проверки..."
+local update_state = "ГЋГ¦ГЁГ¤Г Г­ГЁГҐ ГЇГ°Г®ГўГҐГ°ГЄГЁ..."
 local update_available = false
 local new_version = ""
 
@@ -79,12 +79,12 @@ local keys = {}
 for k, v in pairs(vk) do keys[v] = k:gsub("VK_", "") end
 
 function getKeyName(id)
-    if not id or id == 0 then return "НЕ НАЗНАЧЕНО" end
+    if not id or id == 0 then return "ГЌГ… ГЌГЂГ‡ГЌГЂГ—Г…ГЌГЋ" end
     return keys[id] or tostring(id)
 end
 
 function check_update()
-    update_state = "Проверка обновлений..."
+    update_state = "ГЏГ°Г®ГўГҐГ°ГЄГ  Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГ©..."
     downloadUrlToFile(update_url, update_path, function(id, status, p1, p2)
         if status == dlstatus.STATUSEX_ENDDOWNLOAD then
             local file = io.open(update_path, "r")
@@ -97,26 +97,26 @@ function check_update()
                     if data.version ~= cur_version then
                         update_available = true
                         new_version = data.version
-                        update_state = "Доступно обновление: v" .. new_version
+                        update_state = "Г„Г®Г±ГІГіГЇГ­Г® Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ: v" .. new_version
                     else
-                        update_state = "У вас установлена последняя версия."
+                        update_state = "Г“ ГўГ Г± ГіГ±ГІГ Г­Г®ГўГ«ГҐГ­Г  ГЇГ®Г±Г«ГҐГ¤Г­ГїГї ГўГҐГ°Г±ГЁГї."
                     end
                 else
-                    update_state = "Ошибка парсинга Update.json"
+                    update_state = "ГЋГёГЁГЎГЄГ  ГЇГ Г°Г±ГЁГ­ГЈГ  Update.json"
                 end
             end
         elseif status == dlstatus.STATUS_ENDDOWNLOADDATA then
-            update_state = "Ошибка скачивания файла проверки."
+            update_state = "ГЋГёГЁГЎГЄГ  Г±ГЄГ Г·ГЁГўГ Г­ГЁГї ГґГ Г©Г«Г  ГЇГ°Г®ГўГҐГ°ГЄГЁ."
         end
     end)
 end
 
 function perform_update()
-    update_state = "Скачивание обновления..."
+    update_state = "Г‘ГЄГ Г·ГЁГўГ Г­ГЁГҐ Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї..."
     downloadUrlToFile(script_url, script_path, function(id, status, p1, p2)
         if status == dlstatus.STATUSEX_ENDDOWNLOAD then
-            update_state = "Обновление завершено! Перезагрузка..."
-            sampAddChatMessage("[ChaseTracker] Скрипт обновлен до версии " .. new_version .. ". Перезагрузка...", 0x00FF00)
+            update_state = "ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г§Г ГўГҐГ°ГёГҐГ­Г®! ГЏГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГ ..."
+            sampAddChatMessage("[ChaseTracker] Г‘ГЄГ°ГЁГЇГІ Г®ГЎГ­Г®ГўГ«ГҐГ­ Г¤Г® ГўГҐГ°Г±ГЁГЁ " .. new_version .. ". ГЏГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГ ...", 0x00FF00)
             thisScript():reload()
         end
     end)
@@ -156,7 +156,7 @@ local function draw_sys_bind(label, bind_key_name)
     imgui.Text(u8(label))
     imgui.SameLine(150)
     local current_key = settings.main[bind_key_name] or 0
-    local btn_text = (ui_waiting_bind == bind_key_name) and u8"ЖДЕМ НАЖАТИЯ (ESC - СБРОС)" or (current_key == 0 and u8"НЕ НАЗНАЧЕНО" or u8(getKeyName(current_key)))
+    local btn_text = (ui_waiting_bind == bind_key_name) and u8"Г†Г„Г…ГЊ ГЌГЂГ†ГЂГ’Г€Гџ (ESC - Г‘ГЃГђГЋГ‘)" or (current_key == 0 and u8"ГЌГ… ГЌГЂГ‡ГЌГЂГ—Г…ГЌГЋ" or u8(getKeyName(current_key)))
     if imgui.Button(btn_text .. "##" .. bind_key_name, imgui.ImVec2(-1, 25)) then
         ui_waiting_bind = bind_key_name
     end
@@ -167,46 +167,46 @@ local render_menu = imgui.OnFrame(function() return ui_menu[0] end, function(pla
     imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
     imgui.SetNextWindowSize(imgui.ImVec2(550, 520), imgui.Cond.FirstUseEver)
     
-    if imgui.Begin(u8"Настройки ChaseTracker (Kevin_Zhukoff [Yuma])", ui_menu, imgui.WindowFlags.NoCollapse) then
+    if imgui.Begin(u8"ГЌГ Г±ГІГ°Г®Г©ГЄГЁ ChaseTracker (Kevin_Zhukoff [Yuma])", ui_menu, imgui.WindowFlags.NoCollapse) then
         if imgui.BeginTabBar("Tabs") then
             
-            if imgui.BeginTabItem(u8"Внешний вид HUD") then
-                imgui.Text(u8"Элементы на экране:")
-                if imgui.Checkbox(u8"Показывать Ник", cb_show_nick) then settings.main.show_nick = cb_show_nick[0] saveSettings() end
-                if imgui.Checkbox(u8"Показывать ID", cb_show_id) then settings.main.show_id = cb_show_id[0] saveSettings() end
-                if imgui.Checkbox(u8"Показывать Статус", cb_show_status) then settings.main.show_status = cb_show_status[0] saveSettings() end
-                if imgui.Checkbox(u8"Показывать Таймер /z", cb_show_z) then settings.main.show_z_timer = cb_show_z[0] saveSettings() end
+            if imgui.BeginTabItem(u8"Г‚Г­ГҐГёГ­ГЁГ© ГўГЁГ¤ HUD") then
+                imgui.Text(u8"ГќГ«ГҐГ¬ГҐГ­ГІГ» Г­Г  ГЅГЄГ°Г Г­ГҐ:")
+                if imgui.Checkbox(u8"ГЏГ®ГЄГ Г§Г»ГўГ ГІГј ГЌГЁГЄ", cb_show_nick) then settings.main.show_nick = cb_show_nick[0] saveSettings() end
+                if imgui.Checkbox(u8"ГЏГ®ГЄГ Г§Г»ГўГ ГІГј ID", cb_show_id) then settings.main.show_id = cb_show_id[0] saveSettings() end
+                if imgui.Checkbox(u8"ГЏГ®ГЄГ Г§Г»ГўГ ГІГј Г‘ГІГ ГІГіГ±", cb_show_status) then settings.main.show_status = cb_show_status[0] saveSettings() end
+                if imgui.Checkbox(u8"ГЏГ®ГЄГ Г§Г»ГўГ ГІГј Г’Г Г©Г¬ГҐГ° /z", cb_show_z) then settings.main.show_z_timer = cb_show_z[0] saveSettings() end
                 
                 imgui.Separator()
-                imgui.Text(u8"Текст и Цвета:")
-                if imgui.SliderFloat(u8"Размер текста (Scale)", slider_scale, 0.5, 3.0) then settings.main.hud_scale = slider_scale[0] saveSettings() end
-                if imgui.ColorEdit4(u8"Цвет основного текста", color_text) then
+                imgui.Text(u8"Г’ГҐГЄГ±ГІ ГЁ Г–ГўГҐГІГ :")
+                if imgui.SliderFloat(u8"ГђГ Г§Г¬ГҐГ° ГІГҐГЄГ±ГІГ  (Scale)", slider_scale, 0.5, 3.0) then settings.main.hud_scale = slider_scale[0] saveSettings() end
+                if imgui.ColorEdit4(u8"Г–ГўГҐГІ Г®Г±Г­Г®ГўГ­Г®ГЈГ® ГІГҐГЄГ±ГІГ ", color_text) then
                     settings.main.text_color_r = color_text[0]; settings.main.text_color_g = color_text[1]; settings.main.text_color_b = color_text[2]; settings.main.text_color_a = color_text[3]; saveSettings()
                 end
-                if imgui.ColorEdit4(u8"Цвет таймера /z", color_z) then
+                if imgui.ColorEdit4(u8"Г–ГўГҐГІ ГІГ Г©Г¬ГҐГ°Г  /z", color_z) then
                     settings.main.z_color_r = color_z[0]; settings.main.z_color_g = color_z[1]; settings.main.z_color_b = color_z[2]; settings.main.z_color_a = color_z[3]; saveSettings()
                 end
                 
                 imgui.Separator()
-                imgui.Text(u8"Стрелка над головой:")
-                if imgui.Checkbox(u8"Включить маркер над целью", cb_show_arrow) then settings.main.show_arrow = cb_show_arrow[0] saveSettings() end
-                if imgui.Checkbox(u8"Анимация (плавает вверх-вниз)", cb_arrow_anim) then settings.main.arrow_anim = cb_arrow_anim[0] saveSettings() end
-                if imgui.SliderFloat(u8"Размер маркера", slider_arrow_size, 5.0, 50.0) then settings.main.arrow_size = slider_arrow_size[0] saveSettings() end
+                imgui.Text(u8"Г‘ГІГ°ГҐГ«ГЄГ  Г­Г Г¤ ГЈГ®Г«Г®ГўГ®Г©:")
+                if imgui.Checkbox(u8"Г‚ГЄГ«ГѕГ·ГЁГІГј Г¬Г Г°ГЄГҐГ° Г­Г Г¤ Г¶ГҐГ«ГјГѕ", cb_show_arrow) then settings.main.show_arrow = cb_show_arrow[0] saveSettings() end
+                if imgui.Checkbox(u8"ГЂГ­ГЁГ¬Г Г¶ГЁГї (ГЇГ«Г ГўГ ГҐГІ ГўГўГҐГ°Гµ-ГўГ­ГЁГ§)", cb_arrow_anim) then settings.main.arrow_anim = cb_arrow_anim[0] saveSettings() end
+                if imgui.SliderFloat(u8"ГђГ Г§Г¬ГҐГ° Г¬Г Г°ГЄГҐГ°Г ", slider_arrow_size, 5.0, 50.0) then settings.main.arrow_size = slider_arrow_size[0] saveSettings() end
                 
-                if imgui.ColorEdit4(u8"Цвет маркера", color_arrow) then
+                if imgui.ColorEdit4(u8"Г–ГўГҐГІ Г¬Г Г°ГЄГҐГ°Г ", color_arrow) then
                     settings.main.arrow_color_r = color_arrow[0]; settings.main.arrow_color_g = color_arrow[1]; settings.main.arrow_color_b = color_arrow[2]; settings.main.arrow_color_a = color_arrow[3]; saveSettings()
                 end
                 
                 imgui.Separator()
-                if imgui.Button(ui_edit_hud[0] and u8"СОХРАНИТЬ ПОЗИЦИЮ HUD" or u8"ПЕРЕМЕСТИТЬ HUD", imgui.ImVec2(-1, 40)) then
+                if imgui.Button(ui_edit_hud[0] and u8"Г‘ГЋГ•ГђГЂГЌГ€Г’Гњ ГЏГЋГ‡Г€Г–Г€Гћ HUD" or u8"ГЏГ…ГђГ…ГЊГ…Г‘Г’Г€Г’Гњ HUD", imgui.ImVec2(-1, 40)) then
                     ui_edit_hud[0] = not ui_edit_hud[0]
                 end
 
                 imgui.EndTabItem()
             end
 
-            if imgui.BeginTabItem(u8"Системные Бинды") then
-                imgui.TextColored(imgui.ImVec4(0.5, 0.5, 0.5, 1), u8"Нажмите на кнопку, чтобы назначить клавишу. Нажмите ESC для сброса.")
+            if imgui.BeginTabItem(u8"Г‘ГЁГ±ГІГҐГ¬Г­Г»ГҐ ГЃГЁГ­Г¤Г»") then
+                imgui.TextColored(imgui.ImVec4(0.5, 0.5, 0.5, 1), u8"ГЌГ Г¦Г¬ГЁГІГҐ Г­Г  ГЄГ­Г®ГЇГЄГі, Г·ГІГ®ГЎГ» Г­Г Г§Г­Г Г·ГЁГІГј ГЄГ«Г ГўГЁГёГі. ГЌГ Г¦Г¬ГЁГІГҐ ESC Г¤Г«Гї Г±ГЎГ°Г®Г±Г .")
                 imgui.Separator()
                 draw_sys_bind("/z", "bind_z")
                 draw_sys_bind("/cuff", "bind_cuff")
@@ -218,17 +218,17 @@ local render_menu = imgui.OnFrame(function() return ui_menu[0] end, function(pla
                 imgui.EndTabItem()
             end
             
-            if imgui.BeginTabItem(u8"Свои Команды") then
-                imgui.Text(u8"Добавить кастомный бинд:")
+            if imgui.BeginTabItem(u8"Г‘ГўГ®ГЁ ГЉГ®Г¬Г Г­Г¤Г»") then
+                imgui.Text(u8"Г„Г®ГЎГ ГўГЁГІГј ГЄГ Г±ГІГ®Г¬Г­Г»Г© ГЎГЁГ­Г¤:")
                 imgui.PushItemWidth(300)
-                imgui.InputTextWithHint("##cmd", u8"/su {id} 3 Неподчинение", ui_inputCmd, 256)
+                imgui.InputTextWithHint("##cmd", u8"/su {id} 3 ГЌГҐГЇГ®Г¤Г·ГЁГ­ГҐГ­ГЁГҐ", ui_inputCmd, 256)
                 imgui.PopItemWidth()
                 imgui.SameLine()
                 
-                local keyName = (ui_isWaitingKey) and u8"ЖДУ..." or (ui_currentKey == 0 and u8"ВЫБРАТЬ" or u8(getKeyName(ui_currentKey)))
+                local keyName = (ui_isWaitingKey) and u8"Г†Г„Г“..." or (ui_currentKey == 0 and u8"Г‚Г›ГЃГђГЂГ’Гњ" or u8(getKeyName(ui_currentKey)))
                 if imgui.Button(keyName, imgui.ImVec2(100, 25)) then ui_isWaitingKey = true end
                 
-                if imgui.Button(u8"ДОБАВИТЬ", imgui.ImVec2(-1, 30)) then
+                if imgui.Button(u8"Г„ГЋГЃГЂГ‚Г€Г’Гњ", imgui.ImVec2(-1, 30)) then
                     local cmdStr = u8:decode(ffi.string(ui_inputCmd))
                     if cmdStr and #cmdStr > 0 and ui_currentKey ~= 0 then
                         table.insert(settings.binds, {key = ui_currentKey, cmd = cmdStr})
@@ -247,7 +247,7 @@ local render_menu = imgui.OnFrame(function() return ui_menu[0] end, function(pla
                         imgui.Text(u8(tostring(bind.cmd or "Error")))
                         
                         imgui.SameLine(imgui.GetContentRegionAvail().x - 60) 
-                        if imgui.Button(u8"Удалить") then
+                        if imgui.Button(u8"Г“Г¤Г Г«ГЁГІГј") then
                             table.remove(settings.binds, i)
                             saveSettings()
                         end
@@ -257,19 +257,19 @@ local render_menu = imgui.OnFrame(function() return ui_menu[0] end, function(pla
                 imgui.EndTabItem()
             end
 
-            if imgui.BeginTabItem(u8"Информация") then
-                imgui.Text(u8"Скрипт: ChaseTracker")
-                imgui.Text(u8"Автор: Zhukoff Kevin_Zhukoff [Yuma]")
-                imgui.Text(u8"Текущая версия: " .. cur_version)
+            if imgui.BeginTabItem(u8"Г€Г­ГґГ®Г°Г¬Г Г¶ГЁГї") then
+                imgui.Text(u8"Г‘ГЄГ°ГЁГЇГІ: ChaseTracker")
+                imgui.Text(u8"ГЂГўГІГ®Г°: Zhukoff Kevin_Zhukoff [Yuma]")
+                imgui.Text(u8"Г’ГҐГЄГіГ№Г Гї ГўГҐГ°Г±ГЁГї: " .. cur_version)
                 imgui.Separator()
-                imgui.Text(u8"Статус: " .. u8(update_state))
+                imgui.Text(u8"Г‘ГІГ ГІГіГ±: " .. u8(update_state))
                 
-                if imgui.Button(u8"Проверить обновления", imgui.ImVec2(-1, 35)) then
+                if imgui.Button(u8"ГЏГ°Г®ГўГҐГ°ГЁГІГј Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї", imgui.ImVec2(-1, 35)) then
                     check_update()
                 end
                 
                 if update_available then
-                    if imgui.Button(u8"Установить обновление", imgui.ImVec2(-1, 35)) then
+                    if imgui.Button(u8"Г“Г±ГІГ Г­Г®ГўГЁГІГј Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ", imgui.ImVec2(-1, 35)) then
                         perform_update()
                     end
                 end
@@ -302,32 +302,32 @@ local render_hud = imgui.OnFrame(function() return chase.active or ui_edit_hud[0
             local pos = imgui.GetWindowPos()
             settings.main.hud_x = pos.x
             settings.main.hud_y = pos.y
-            imgui.TextColored(imgui.ImVec4(1, 1, 0, 1), u8"РЕЖИМ РЕДАКТИРОВАНИЯ (Двигай окно)")
+            imgui.TextColored(imgui.ImVec4(1, 1, 0, 1), u8"ГђГ…Г†Г€ГЊ ГђГ…Г„ГЂГЉГ’Г€ГђГЋГ‚ГЂГЌГ€Гџ (Г„ГўГЁГЈГ Г© Г®ГЄГ­Г®)")
         end
 
         imgui.SetWindowFontScale(settings.main.hud_scale)
         imgui.PushStyleColor(imgui.Col.Text, imgui.ImVec4(settings.main.text_color_r, settings.main.text_color_g, settings.main.text_color_b, settings.main.text_color_a))
 
-        if settings.main.show_nick then imgui.Text(u8("Цель: " .. tostring(chase.name or ""))) end
+        if settings.main.show_nick then imgui.Text(u8("Г–ГҐГ«Гј: " .. tostring(chase.name or ""))) end
         if settings.main.show_id then imgui.Text(u8("ID: " .. tostring(chase.id or -1))) end
         if settings.main.show_status then 
-            local st = (chase.status == nil or chase.status == "") and "Активна" or chase.status
-            imgui.Text(u8("Статус: " .. tostring(st))) 
+            local st = (chase.status == nil or chase.status == "") and "ГЂГЄГІГЁГўГ­Г " or chase.status
+            imgui.Text(u8("Г‘ГІГ ГІГіГ±: " .. tostring(st))) 
         end
         
         imgui.PopStyleColor()
 
         if settings.main.show_z_timer then
-            local zText = "Нет"
+            local zText = "ГЌГҐГІ"
             if chase.z_expiry and chase.z_expiry > 0 and chase.name == chase.z_name then
                 local timeLeft = chase.z_expiry - os.time()
                 if timeLeft > 0 then
                     zText = string.format("%02d:%02d", math.floor(timeLeft / 60), timeLeft % 60)
                 else
-                    zText = "СПАЛА!"
+                    zText = "Г‘ГЏГЂГ‹ГЂ!"
                 end
             end
-            imgui.Text(u8"Таймер /z: ")
+            imgui.Text(u8"Г’Г Г©Г¬ГҐГ° /z: ")
             imgui.SameLine()
             imgui.TextColored(imgui.ImVec4(settings.main.z_color_r, settings.main.z_color_g, settings.main.z_color_b, settings.main.z_color_a), u8(zText))
         end
@@ -378,7 +378,7 @@ function main()
     while not isSampAvailable() do wait(100) end
     loadSettings()
     
-    sampAddChatMessage("[ChaseTracker] v" .. cur_version .. " by Kevin_Zhukoff [Yuma] загружен. Меню: {FFFF00}/chase", 0x00FF00)
+    sampAddChatMessage("[ChaseTracker] v" .. cur_version .. " by Kevin_Zhukoff [Yuma] Г§Г ГЈГ°ГіГ¦ГҐГ­. ГЊГҐГ­Гѕ: {FFFF00}/chase", 0x00FF00)
     
     sampRegisterChatCommand("chase", function() ui_menu[0] = not ui_menu[0] end)
     
@@ -386,14 +386,14 @@ function main()
         arg = arg or ""
         if #arg == 0 then
             resetChase()
-            sampAddChatMessage("[ChaseTracker] Ручная цель сброшена.", 0xFFFF00)
+            sampAddChatMessage("[ChaseTracker] ГђГіГ·Г­Г Гї Г¶ГҐГ«Гј Г±ГЎГ°Г®ГёГҐГ­Г .", 0xFFFF00)
             return
         end
         local id = tonumber(arg:match("%d+"))
         if id and sampIsPlayerConnected(id) then 
-            setTarget(id, "Ручной таргет (/trg)")
+            setTarget(id, "ГђГіГ·Г­Г®Г© ГІГ Г°ГЈГҐГІ (/trg)")
         else
-            sampAddChatMessage("[ChaseTracker] Игрок с таким ID не найден!", 0xFF0000)
+            sampAddChatMessage("[ChaseTracker] Г€ГЈГ°Г®ГЄ Г± ГІГ ГЄГЁГ¬ ID Г­ГҐ Г­Г Г©Г¤ГҐГ­!", 0xFF0000)
         end
     end)
     
@@ -402,7 +402,7 @@ function main()
         sampSendChat("/pursuit " .. arg)
         local id = tonumber(arg:match("%d+"))
         if id and sampIsPlayerConnected(id) then 
-            setTarget(id, "Погоня (/pursuit)") 
+            setTarget(id, "ГЏГ®ГЈГ®Г­Гї (/pursuit)") 
         end
     end)
 
@@ -416,7 +416,7 @@ function main()
         if chase.active then
             if not sampIsPlayerConnected(chase.id) or sampGetPlayerNickname(chase.id) ~= chase.name then
                 resetChase()
-                sampAddChatMessage("[ChaseTracker] Цель покинула сервер или сменила ID. Отслеживание завершено.", 0xFF6347)
+                sampAddChatMessage("[ChaseTracker] Г–ГҐГ«Гј ГЇГ®ГЄГЁГ­ГіГ«Г  Г±ГҐГ°ГўГҐГ° ГЁГ«ГЁ Г±Г¬ГҐГ­ГЁГ«Г  ID. ГЋГІГ±Г«ГҐГ¦ГЁГўГ Г­ГЁГҐ Г§Г ГўГҐГ°ГёГҐГ­Г®.", 0xFF6347)
             end
         end
 
@@ -462,7 +462,7 @@ function main()
                 if res and targetPed and doesCharExist(targetPed) then
                     local resId, targetId = sampGetPlayerIdByCharHandle(targetPed)
                     if resId and targetId ~= -1 then
-                        setTarget(targetId, "Таргет (2x ПКМ)")
+                        setTarget(targetId, "Г’Г Г°ГЈГҐГІ (2x ГЏГЉГЊ)")
                         rmbTargetWindow = 0
                     end
                 end
@@ -479,17 +479,17 @@ function main()
                     end
                     
                     if (settings.main.bind_cuff or 0) ~= 0 and wasKeyPressed(settings.main.bind_cuff) then 
-                        sampSendChat("/me снял наручники с тактического пояса и резким движением заковал руки подозреваемого")
+                        sampSendChat("/me Г±Г­ГїГ« Г­Г Г°ГіГ·Г­ГЁГЄГЁ Г± ГІГ ГЄГІГЁГ·ГҐГ±ГЄГ®ГЈГ® ГЇГ®ГїГ±Г  ГЁ Г°ГҐГ§ГЄГЁГ¬ Г¤ГўГЁГ¦ГҐГ­ГЁГҐГ¬ Г§Г ГЄГ®ГўГ Г« Г°ГіГЄГЁ ГЇГ®Г¤Г®Г§Г°ГҐГўГ ГҐГ¬Г®ГЈГ®")
                         sampProcessChatInput("/cuff " .. chase.id) 
                     end
                     
                     if (settings.main.bind_pull or 0) ~= 0 and wasKeyPressed(settings.main.bind_pull) then 
-                        sampSendChat("/me силой открыл дверь транспорта и вытащил подозреваемого наружу")
+                        sampSendChat("/me Г±ГЁГ«Г®Г© Г®ГІГЄГ°Г»Г« Г¤ГўГҐГ°Гј ГІГ°Г Г­Г±ГЇГ®Г°ГІГ  ГЁ ГўГ»ГІГ Г№ГЁГ« ГЇГ®Г¤Г®Г§Г°ГҐГўГ ГҐГ¬Г®ГЈГ® Г­Г Г°ГіГ¦Гі")
                         sampProcessChatInput("/pull " .. chase.id) 
                     end
                     
                     if (settings.main.bind_gotome or 0) ~= 0 and wasKeyPressed(settings.main.bind_gotome) then 
-                        sampSendChat("/me взял задержанного за заломленную руку и уверенно повел за собой")
+                        sampSendChat("/me ГўГ§ГїГ« Г§Г Г¤ГҐГ°Г¦Г Г­Г­Г®ГЈГ® Г§Г  Г§Г Г«Г®Г¬Г«ГҐГ­Г­ГіГѕ Г°ГіГЄГі ГЁ ГіГўГҐГ°ГҐГ­Г­Г® ГЇГ®ГўГҐГ« Г§Г  Г±Г®ГЎГ®Г©")
                         sampProcessChatInput("/gotome " .. chase.id) 
                     end
                     
@@ -512,8 +512,8 @@ function setTarget(id, statusText)
         chase.active = true
         chase.id = id
         chase.name = sampGetPlayerNickname(chase.id) or "Unknown"
-        chase.status = statusText or "Ручной таргет"
-        sampAddChatMessage(string.format("[ChaseTracker] Установлена цель: %s [%d]", chase.name, chase.id), 0x00FF00)
+        chase.status = statusText or "ГђГіГ·Г­Г®Г© ГІГ Г°ГЈГҐГІ"
+        sampAddChatMessage(string.format("[ChaseTracker] Г“Г±ГІГ Г­Г®ГўГ«ГҐГ­Г  Г¶ГҐГ«Гј: %s [%d]", chase.name, chase.id), 0x00FF00)
     end
 end
 
@@ -562,21 +562,21 @@ end
 
 function sampev.onServerMessage(color, text)
     local cleanText = cleanString(text)
-    if cleanText:find("Вы успешно начали погоню за игроком") or cleanText:find("начали отслеживать") or cleanText:find("начали преследование") then
+    if cleanText:find("Г‚Г» ГіГ±ГЇГҐГёГ­Г® Г­Г Г·Г Г«ГЁ ГЇГ®ГЈГ®Г­Гѕ Г§Г  ГЁГЈГ°Г®ГЄГ®Г¬") or cleanText:find("Г­Г Г·Г Г«ГЁ Г®ГІГ±Г«ГҐГ¦ГЁГўГ ГІГј") or cleanText:find("Г­Г Г·Г Г«ГЁ ГЇГ°ГҐГ±Г«ГҐГ¤Г®ГўГ Г­ГЁГҐ") then
         local name, id = cleanText:match("([A-Za-z0-9_]+)%s*%[ID:%s*(%d+)%]")
         if not name or not id then
-            name, id = cleanText:match("игроком%s+([A-Za-z0-9_]+).*ID:%s*(%d+)")
+            name, id = cleanText:match("ГЁГЈГ°Г®ГЄГ®Г¬%s+([A-Za-z0-9_]+).*ID:%s*(%d+)")
         end
         if name and id then 
-            chase.active = true; chase.name = name; chase.id = tonumber(id); chase.status = "Погоня (/pursuit)" 
+            chase.active = true; chase.name = name; chase.id = tonumber(id); chase.status = "ГЏГ®ГЈГ®Г­Гї (/pursuit)" 
         end
     end
-    if cleanText:find("Вы успешно пометили игрока") and cleanText:find("течение") then
-        local name = cleanText:match("пометили игрока%s+(.+)%.%s+Если")
-        local minutes = cleanText:match("течение%s+(%d+)%s+минут")
+    if cleanText:find("Г‚Г» ГіГ±ГЇГҐГёГ­Г® ГЇГ®Г¬ГҐГІГЁГ«ГЁ ГЁГЈГ°Г®ГЄГ ") and cleanText:find("ГІГҐГ·ГҐГ­ГЁГҐ") then
+        local name = cleanText:match("ГЇГ®Г¬ГҐГІГЁГ«ГЁ ГЁГЈГ°Г®ГЄГ %s+(.+)%.%s+Г…Г±Г«ГЁ")
+        local minutes = cleanText:match("ГІГҐГ·ГҐГ­ГЁГҐ%s+(%d+)%s+Г¬ГЁГ­ГіГІ")
         if name and minutes then chase.z_expiry = os.time() + (tonumber(minutes) * 60); chase.z_name = name end
     end
-    if cleanText:find("Преследование.*приостановлено") or cleanText:find("отправил%(а%) подозреваемого.*в КПЗ") or cleanText:find("потеряли из виду") or cleanText:find("погоня была прекращена") then 
+    if cleanText:find("ГЏГ°ГҐГ±Г«ГҐГ¤Г®ГўГ Г­ГЁГҐ.*ГЇГ°ГЁГ®Г±ГІГ Г­Г®ГўГ«ГҐГ­Г®") or cleanText:find("Г®ГІГЇГ°Г ГўГЁГ«%(Г %) ГЇГ®Г¤Г®Г§Г°ГҐГўГ ГҐГ¬Г®ГЈГ®.*Гў ГЉГЏГ‡") or cleanText:find("ГЇГ®ГІГҐГ°ГїГ«ГЁ ГЁГ§ ГўГЁГ¤Гі") or cleanText:find("ГЇГ®ГЈГ®Г­Гї ГЎГ»Г«Г  ГЇГ°ГҐГЄГ°Г Г№ГҐГ­Г ") then 
         resetChase() 
     end
 end
