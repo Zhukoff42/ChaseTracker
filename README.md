@@ -1,7 +1,5 @@
-<img width="1366" height="768" alt="03 32 20 203" src="https://github.com/user-attachments/assets/ab8fa392-5916-48fc-8cc0-32ffa480f601" />
-<img width="1366" height="768" alt="03 32 18 125" src="https://github.com/user-attachments/assets/24fc8f4d-0bd4-4b9c-a44c-213a27b0cb0d" />
-<img width="1366" height="768" alt="03 32 16 328" src="https://github.com/user-attachments/assets/a027d337-af68-4cd2-9ef5-8db68d801665" />
 # 🚔 ChaseTracker - Ваш надежный помощник в погонях!
+<img width="1366" height="768" alt="03 32 16 328" src="https://github.com/user-attachments/assets/a027d337-af68-4cd2-9ef5-8db68d801665" />
 
 ChaseTracker - это удобный скрипт для автоматизации работы сотрудников МЮ, который поможет не упустить цель из виду. 🚀
 
